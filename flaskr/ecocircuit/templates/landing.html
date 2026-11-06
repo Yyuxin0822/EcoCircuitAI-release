@@ -1,0 +1,361 @@
+{% extends 'base.html' %} {% block scripts %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('ecocircuit.static', filename='icon.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('ecocircuit.static', filename='landing.css') }}"
+/>
+<script>
+  const isLocal =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+  const baseUrl = isLocal
+    ? "http://127.0.0.1:8000"
+    : "https://www.ecocircuitai.com";
+
+  // Explicitly added namespace '/ecocircuit' here:
+  const socket = io(baseUrl + "/ecocircuit", {
+    path: "/socket.io",
+    transports: ["websocket", "polling"],
+    withCredentials: true,
+    autoConnect: false,
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    socket.connect();
+
+    socket.on("connect", function () {
+      console.log("✅ Connected to /ecocircuit.");
+    });
+
+    socket.on("private_msg", function (msg) {
+      console.log("📩 Private message for me:", msg.data);
+    });
+
+    socket.on("disconnect", function () {
+      console.log("❌ Disconnected from /ecocircuit.");
+    });
+
+    socket.on("connect_error", function (error) {
+      console.error("❗ Connection error:", error);
+    });
+  });
+</script>
+
+{% endblock %} {% block content %}
+<div class="page">
+  <div class="landing-page">
+    <div class="content-wrapper">
+      <div class="sub-wrapper" id="left-col">
+        <div style="gap: 1rem">
+          <div class="heading-0">
+            EcoCircuitAI: Your Visionary Engineering Assistant <br />
+          </div>
+          <div style="font-size: 18px; color: #8b8b8b">
+            From Text to Integrated Environmental Systems
+          </div>
+        </div>
+
+        <div class="annotation">
+          <br />
+          Empowered by Large Language Model (LLM), EcoCircuit generates an
+          environmental mind map with system engineering chain /
+          tree-of-thoughts. It helps navigate the compexity of technical
+          blackbox by following the classic system engineering model with
+          inputs, outputs, processes, co-optimization, and regeneration loop, to
+          provide users ideas to later doodle on.
+        </div>
+
+        <form
+          class="buttons"
+          method="post"
+          action="{{ url_for('account.store_key') }}"
+          autocomplete="off"
+          id="api-key-form"
+        >
+          <div id="api-key-box">
+            <div
+              id="api-key-msg"
+              style="display: flex; align-items: center; gap: 0.5rem"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 23 23"
+                fill="none"
+                transform="translate(0, -2.5)"
+              >
+                <path
+                  d="M5.5 20.5H9.5C9.5 21.6 8.6 22.5 7.5 22.5C6.4 22.5 5.5 21.6 5.5 20.5ZM3.5 19.5H11.5V17.5H3.5V19.5ZM15 10C15 13.82 12.34 15.86 11.23 16.5H3.77C2.66 15.86 0 13.82 0 10C0 5.86 3.36 2.5 7.5 2.5C11.64 2.5 15 5.86 15 10ZM13 10C13 6.97 10.53 4.5 7.5 4.5C4.47 4.5 2 6.97 2 10C2 12.47 3.49 13.89 4.35 14.5H10.65C11.51 13.89 13 12.47 13 10ZM19.87 7.87L18.5 8.5L19.87 9.13L20.5 10.5L21.13 9.13L22.5 8.5L21.13 7.87L20.5 6.5L19.87 7.87ZM17.5 6.5L18.44 4.44L20.5 3.5L18.44 2.56L17.5 0.5L16.56 2.56L14.5 3.5L16.56 4.44L17.5 6.5Z"
+                  fill="black"
+                />
+              </svg>
+              <div style="line-height: 1.5">
+                EcoCircuitAI is open-source and has no charge on our end. To
+                proceed, we ask users to provide their own API key, as the tool
+                uses a third-party large language model (LLM).
+                <a
+                  class="bold link-to-external"
+                  href="{{ url_for('ecocircuit.static', filename='docs/How to Get Your OpenAI API Key.pdf') }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Learn how to get OPENAI API key and third-party usage cost
+                  examples.</a
+                >
+                <br />
+              </div>
+            </div>
+            <div id="api-key-input">
+              <input
+                type="text"
+                name="api_key"
+                placeholder="Input your OPENAI API key"
+                autocomplete="off"
+                required
+              />
+              <button type="submit" id="start-button">
+                <span class="icon-start"></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-check" id="consent-and-openning">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              name="consent"
+              id="consentCheckbox"
+              required
+            />
+            <label class="form-check-label" for="consentCheckbox">
+              By using EcoCircuitAI, you agree to our
+              <a
+                href="#"
+                class="bold link-to-external"
+                data-bs-toggle="modal"
+                data-bs-target="#termsModal"
+                >terms</a
+              >
+              and have read our
+              <a
+                href="#"
+                class="bold link-to-external"
+                data-bs-toggle="modal"
+                data-bs-target="#privacyModal"
+                >privacy policy</a
+              >.
+            </label>
+            <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                const consentCheckbox =
+                  document.getElementById("consentCheckbox");
+
+                consentCheckbox.addEventListener("invalid", function () {
+                  this.setCustomValidity(
+                    "Please read and agree to our terms and privacy policy to continue."
+                  );
+                });
+
+                consentCheckbox.addEventListener("change", function () {
+                  this.setCustomValidity("");
+                });
+              });
+            </script>
+          </div>
+
+          {% if g.user %}
+          <div class="form-check" id="store-key-option">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              name="store_key"
+              id="storeKeyCheckbox"
+            />
+            <label class="form-check-label" for="storeKeyCheckbox">
+              Store my API key and consent for future visits. You can update
+              this setting anytime.
+            </label>
+          </div>
+
+          <div class="user-welcome-message">
+            Welcome back,
+            <a
+              class="bold link-to-external"
+              id="username"
+              href="{{url_for('account.projects')}}"
+              >{{ g.user['name'] }}</a
+            >! &nbsp;
+            <a
+              id="signout"
+              class="bold link-to-external"
+              href="{{ url_for('auth0.logout') }}"
+              >Sign Out</a
+            >
+          </div>
+
+          {% else %}
+          <div
+            class="user-signin-message"
+            style="
+              display: flex;
+              flex-direction: column;
+              line-height: 1.5;
+              gap: 0.5rem;
+            "
+          >
+            <div>
+              🔓 <span class="bold">Trying anonymously?</span><br />
+              Your key isn't stored, and you'll need to re-enter it each visit.
+            </div>
+
+            <div>
+              ✨ <span class="bold">First-time here?</span><br />
+              <a
+                class="bold link-to-external"
+                href="{{ url_for('auth0.login') }}"
+                >Sign up</a
+              >
+              to securely store your API key and enable project features.
+            </div>
+
+            <div>
+              🔒 <span class="bold">Returning user?</span><br />
+              <a
+                class="bold link-to-external"
+                href="{{ url_for('auth0.login') }}"
+                >Sign in</a
+              >
+              to automatically load your saved API key and previous projects.
+            </div>
+            <div style="margin-top: 10px">
+              <a
+                href="#"
+                class="bold link-to-external"
+                data-bs-toggle="modal"
+                data-bs-target="#legacyModal"
+                >Legacy User Notice</a
+              >
+            </div>
+          </div>
+
+          {% endif %}
+        </form>
+      </div>
+
+      <div class="sub-wrapper" id="right-col">
+        <div id="showcases">
+          <div id="metabolism-preview">
+            <img
+              id="metabolism-img"
+              src="{{ url_for('ecocircuit.static', filename='images/Picture1.png') }}"
+              alt="Metabolism Preview"
+            />
+          </div>
+          <a
+            class="floating-anno external-link"
+            href="{{ url_for('ecocircuit.generate', id='c486f8b2-7479-43a0-aaef-99072bafa77c') }}"
+          >
+            <div class="icon-sketcharrow-up-1"></div>
+            <div>Click to view an example</div>
+          </a>
+
+          <div class="floating-anno sysbar" style="scale: 0.8">
+            <div class="sysbar-item">
+              <span class="icon-common icon-energy"></span>Energy
+            </div>
+            <div class="sysbar-item">
+              <span class="icon-common icon-water"></span>Water
+            </div>
+            <div class="sysbar-item">
+              <span class="icon-common icon-bio"></span>Biodiversity
+            </div>
+            <div class="sysbar-item">
+              <span class="icon-common icon-solidwaste"></span>Waste
+            </div>
+            <div class="sysbar-item">
+              <span class="icon-common icon-transport"></span>Mobility
+            </div>
+          </div>
+          <div id="prompt-preview">
+            <div class="project-info footer-text">Desert Farm © SDE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-text footer">
+      <div>
+        <div style="gap: 0.25em">
+          Developed by a dedicated community with ♥
+        </div>
+        <div>
+          <a
+            href="{{ url_for('ecocircuit.contributors') }}"
+            class="bold link-to-external"
+            >View All Contributors</a
+          >
+        </div>
+        <div>© 2025 EcoCircuitAI</div>
+      </div>
+      <div>
+        For collaborations, inquiries, issues, or to report code of clonduct
+        violations, email us at - yuxiny0822@gmail.com
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Checkbox and Consent Statement -->
+
+<!-- Terms and Privacy modals are now in base.html and available globally -->
+
+<!-- Legacy User Modal -->
+<div
+  class="modal fade"
+  id="legacyModal"
+  tabindex="-1"
+  aria-labelledby="legacyModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title fw-bold" id="legacyModalLabel">
+          Legacy User Notice
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-4">
+        <p>Dear Legacy User,</p>
+        <p>
+          We've recently upgraded EcoCircuit AI. As part of this transition,
+          your historic account data could not be carried forward.
+        </p>
+        <p>
+          We are sincerely grateful for your early support and contributions —
+          they shaped the foundation of this project.
+        </p>
+        <p>
+          To continue using EcoCircuit AI, please re-register with your email
+          address. We're starting fresh, and would be honored to have you
+          continue with us.
+        </p>
+        <p>Thank you again for being part of our journey.</p>
+        <p class="mb-0"><em>— The EcoCircuit AI Team</em></p>
+      </div>
+      <div class="modal-footer bg-light">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

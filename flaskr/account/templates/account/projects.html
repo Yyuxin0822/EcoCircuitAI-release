@@ -1,0 +1,25 @@
+{% extends 'account/account_base.html' %}
+{% set active_page = 'projects' %}
+
+{% block page_scripts %}
+<!-- Projects specific styles -->
+<link rel="stylesheet" href="{{ url_for('account.static', filename='account/css/projects.css') }}" />
+<script type="module" src="{{ url_for('account.static', filename='account/custom-html/dropdown.js') }}"></script>
+<script>
+  const projects = {{ projects | tojson }};
+  console.log('Projects:', projects);
+</script>
+<script src="{{ url_for('account.static', filename='account/js/projects.js') }}"></script>
+{% endblock %}
+
+{% block account_content %}
+<!-- Projects Section - Using original styling -->
+<section class="page-content main-container" id="project-management" style="display: flex">
+  <div class="projects">
+    <div class="wrapper" id="project-container">
+      <!-- Projects will be dynamically loaded here -->
+    </div>
+  </div>
+</section>
+
+{% endblock %}

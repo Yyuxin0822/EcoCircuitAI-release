@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Contributors{% endblock %}
+
+{% block scripts %}
+<link rel="stylesheet" href="{{ url_for('ecocircuit.static', filename='contributors.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="contributors-page">
+  <div class="contributors-container">
+    <h1 class="page-title">Contributors & Community</h1>
+    
+    <div class="section-container">
+      <div class="contributor-section intro-section">
+        <p>
+          EcoCircuit AI is an <span class="highlight">open-source</span> project powered by the creativity and energy of its community. <br />
+          This page recognizes our early contributors and invites new collaborators to <span class="highlight">join us</span>. <br />
+          This is a beta release, and we're actively shaping the future of <span class="highlight">systems thinking agents</span> + <span class="highlight">visionary design engineering</span>.
+        </p>
+      </div>
+
+      <div class="contributor-section">
+        <div class="section-title">Acknowledgments <span class="last-updated">Last updated: September 2025</span></div>
+        <div class="team-members">
+          <a class="highlight" href="https://www.linkedin.com/in/yuxin-yang-78a671191" target="_blank" rel="noopener noreferrer">Yuxin Yang</a> -
+          <a class="highlight" href="https://www.linkedin.com/in/adam-mekies-pla-877b152a/" target="_blank" rel="noopener noreferrer">Adam R. Mekies</a> -
+          <a class="highlight" href="https://www.sherwoodengineers.com/" target="_blank" rel="noopener noreferrer">Sherwood Design Engineers</a>
+        </div>
+        <div class="acknowledgments">
+          Special thanks to <span class="highlight">Weizhi Wang</span> and
+          <span class="highlight">Justin Massey</span> for their contributions,
+          <span class="highlight">Rachel Still</span> for continuous feedback and
+          support, and numerous others for their valuable insights.
+        </div>
+      </div>
+
+      <div class="contributor-section">
+        <div class="section-title">Behind the Scene <span class="last-updated">Last updated: September 2025</span></div>
+        <div>
+          Here are the critical resources that inspired the creation of
+          EcoCircuit AI: <br /><br />
+          Metabolism:
+          <a class="highlight" href="https://scholar.google.com/scholar?q=The+Metabolism+of+Cities+Abel+1965" target="_blank" rel="noopener noreferrer">"The Metabolism of Cities", Abel 1965</a><br />
+          Agentic AI: <a class="highlight" href="https://arxiv.org/abs/2305.10601" target="_blank" rel="noopener noreferrer">"Tree of Thoughts", Yao et al. 2023</a><br />
+          Data Visualization:
+          <a class="highlight" href="https://www.visualcinnamon.com/portfolio/why-do-cats-and-dogs" target="_blank" rel="noopener noreferrer">"Why Do Cats and Dogs", Visual Cinnamon et al.</a>
+        </div>
+      </div>
+
+      <div class="contributor-section">
+        <div class="section-title">Interested in contributing?</div>
+        <div class="help-options">
+
+          <ul>
+            <li>I want to co-develop the EcoCircuit Definition Language</li>
+            <li>I want to design the user interface and experience</li>
+            <li>I want to write code</li>
+            <li>I want to contribute to agent workflow</li>
+            <li>I want to support EcoCircuit financially</li>
+            <li>I want to be an early adopter and help shape impact</li>
+            <li>I want to stay in touch, meet others in the community, or find other ways to help!</li>
+          </ul>
+                    <p class="contact-info">
+            In the spirit of open source, everyone is welcome to help! 
+             Send us a note at <a class="highlight" href="mailto:yuxiny0822@gmail.com">yuxiny0822@gmail.com</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

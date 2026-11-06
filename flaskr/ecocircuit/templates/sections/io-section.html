@@ -1,0 +1,17 @@
+  <link rel="stylesheet" href="{{ url_for('ecocircuit.static', filename='metabolism/sections/io/io.css') }}">
+  <script src="{{ url_for('ecocircuit.static', filename='metabolism/sections/shared/shared_util.js') }}" defer></script>
+  <script src="{{ url_for('ecocircuit.static', filename='metabolism/sections/io/io-util.js') }}" defer></script>
+  <script src="{{ url_for('ecocircuit.static', filename='metabolism/sections/io/io.js') }}" defer></script>
+  <div class="main-container scroll-snap" data-width="55%" id="io-container">
+    <div class="svg-wrapper" id="io-svg-wrapper">
+      <svg id="matrix-io"></svg>
+    </div>
+    <div
+      id="scroll-container-1"
+      data-ref="io-container"
+      data-scroll-target="metabolism-container"
+      class="fixed-component scroll-trigger"
+    >
+      <div id="scroll-to-bottom" class="quarter-label">Explore Metabolism!</div>
+    </div>
+  </div>

@@ -1,0 +1,113 @@
+  <link rel="stylesheet" href="{{ url_for('ecocircuit.static', filename='metabolism/sections/metabolism/metabolism-toolbar.css') }}">
+  <script src="{{ url_for('ecocircuit.static', filename='metabolism/sections/shared/shared_util.js') }}" defer></script>
+  <script src="{{ url_for('ecocircuit.static', filename='metabolism/sections/metabolism/MetabolismNode.js') }}" defer></script>
+  <script src="{{ url_for('ecocircuit.static', filename='metabolism/sections/metabolism/metabolism-lanes.js') }}" defer></script>
+  <script src="{{ url_for('ecocircuit.static', filename='metabolism/sections/metabolism/metabolism-util.js') }}" defer></script>
+  <script src="{{ url_for('ecocircuit.static', filename='metabolism/sections/metabolism/metabolism-debugger.js') }}" defer></script>
+  <script src="{{ url_for('ecocircuit.static', filename='metabolism/sections/metabolism/metabolism-toolbar.js') }}" defer></script>
+  <script src="{{ url_for('ecocircuit.static', filename='metabolism/sections/metabolism/metabolism-tier1.js') }}" defer></script>
+  <div
+    class="main-container scroll-snap"
+    data-width="100%"
+    id="metabolism-container"
+  >
+    <div class="svg-wrapper" id="metabolism-svg-wrapper">
+      <svg id="matrix-metabolism"></svg>
+    </div>
+
+    <div id="dynamic-btn-container" class="fixed-elements">
+      <div id="meta-confirmButton" class="non-zoomable-button">CONFIRM ✓</div>
+      <div id="meta-computeButton" class="non-zoomable-button">COMPUTE ✨</div>
+      <div id="meta-undoButton" class="non-zoomable-button">
+        UNDO <span style="font-size: 20px">⤺</span>
+      </div>
+    </div>
+
+    <div id="right-toolbar-container" class="fixed-elements">
+      <!-- Investigation Tool -->
+      <div id="investigate-tool">
+        <span
+          class="toolbtn minimized-toolbar"
+          style="display: none"
+          onclick=" toggleToolbar(expand = true, id = 'investigate-tool')"
+        ></span>
+
+        <div class="expanded-toolbar" style="display: flex">
+          <span
+            class="toolbtn minimize-icon"
+            onclick="toggleToolbar(expand = false, id = 'investigate-tool')"
+          ></span>
+          <div>
+            <div
+              class="searchbox"
+              style="font-family: &quot;Combo&quot;, sans-serif"
+            >
+              Investigate
+              <input type="text" id="searchwindow" placeholder="  Search..." />
+              <ul id="searchList" style="display: none"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tool -->
+      <div id="navi-tool">
+        <span
+          class="toolbtn minimized-toolbar"
+          style="display: none"
+          onclick="toggleToolbar(expand = true, id = 'navi-tool')"
+        ></span>
+
+        <div class="expanded-toolbar" style="display: flex">
+          <span
+            class="toolbtn minimize-icon"
+            onclick="toggleToolbar(expand = false, id = 'navi-tool')"
+          ></span>
+          <div id="navibar-wrapper">
+            <div id="navibar-container"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zoom Tool -->
+      <div id="zoominfo" style="z-index: 2">
+        <span
+          class="toolbtn minimized-toolbar"
+          style="display: none"
+          onclick=" toggleToolbar(expand = true, id = 'zoominfo')"
+        ></span>
+        <div class="expanded-toolbar" style="display: flex">
+          <span
+            class="toolbtn minimize-icon"
+            onclick="toggleToolbar(expand = false, id = 'zoominfo')"
+          ></span>
+          <div>
+            <div id="zoominfo-wrapper">
+              <div id="zoominfo-container">
+                <div>Zoom</div>
+                <ul>
+                  <li>Drag to pan</li>
+                  <li>Ctrl + scroll to zoom</li>
+                  <li>Ctrl + 0 to reset</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="scroll-container-2"
+      data-ref="metabolism-container"
+      data-scroll-target="io-container"
+      class="fixed-component scroll-trigger"
+    >
+      <div id="scroll-to-bottom" class="quarter-label">
+        Explore <br />
+        Input-Output!
+      </div>
+    </div>
+
+    <div id="wiki-tooltip"></div>
+  </div>

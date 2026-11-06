@@ -1,0 +1,25 @@
+:root {
+  --dropdown-bg: white;
+  --dropdown-border: #ccc;
+  --dropdown-radius: 0.25rem;
+}
+
+.dropdown {
+  background: var(--dropdown-bg);
+  border: 1px solid var(--dropdown-border);
+  border-radius: var(--dropdown-radius);
+}
+
+icon-dropdown ul{
+    display: flex;
+    flex-direction: column;
+    font-family: "Comfortaa", sans-serif;
+    font-weight: var(--normal-20-font-weight);
+    font-size: 10px;
+    letter-spacing: var(--normal-20-letter-spacing);
+    color: var(--GRAY-TEXT) !important; 
+    padding: 0px;
+    margin: 0px;
+    gap: 1rem;
+}
+

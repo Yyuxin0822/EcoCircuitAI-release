@@ -1,0 +1,374 @@
+img {
+  /* style */
+  border-radius: 0.5rem;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.page {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  min-width: 66rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  flex: 1 0 0;
+  cursor: default;
+  margin-top: 0;
+}
+
+
+.landing-page {
+  height: 100%;
+  width: 66%;
+  min-width: 66rem;
+  display: flex;
+  padding: 1rem 0rem 2rem 0rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.landing-page .content-wrapper {
+  height: 95%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.annotation,
+.landing-page .buttons,
+.buttons input {
+  font-family: var(--font-family-sans-serif-1);
+  font-weight: var(--font-weight-300);
+  font-size: var(--font-size-14);
+  line-height: 200%;
+}
+
+.landing-page .bold {
+  font-weight: 700;
+  color: black;
+}
+
+.link-to-external {
+  cursor: pointer;
+}
+
+.link-to-external:hover {
+  background-color: var(--variable-collection-themelightpurple);
+  backdrop-filter: blur(4px);
+}
+
+.landing-page .footer {
+  color: var(--GRAY-TEXT) !important;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.footer .bold {
+  color: var(--GRAY-TEXT);
+  font-weight: 700;
+}
+
+.footer div {
+  color: var(--GRAY-TEXT);
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.footer a {
+  color: var(--GRAY-TEXT);
+  text-decoration: none;
+}
+
+#signout {
+  color: var(--GRAY-TEXT);
+  text-decoration: none;
+  font-weight: 100
+}
+
+.content-wrapper .sub-wrapper {
+  width: 43%;
+  height: 100%;
+  white-space: normal;
+  gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#left-col {
+  gap: 2rem;
+  display: flex;
+  align-items: flex-start;
+}
+
+#left-col .heading-0 {
+  font-size: 2rem;
+  letter-spacing: -0.01em;
+}
+
+#left-col .buttons {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#left-col #api-key-form {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+#left-col #api-key-input {
+  display: flex;
+  width: 100%;
+  gap: 0.5rem;
+  flex-direction: row;
+}
+
+#left-col form input:not(.form-check-input) {
+  flex: 1;
+  height: 2rem;
+  border-radius: 1rem;
+  border: 1px solid lightgray;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+#left-col #start-button {
+  width: 15%;
+  min-width: 4rem;
+  /* prevents becoming too narrow */
+  height: 2rem;
+  border-radius: 6rem;
+  border: 1px solid lightgray;
+  background-color: var(--SelFlow, #000);
+  color: white;
+  box-shadow: 6px 6px 24px rgba(136, 136, 136, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+#left-col #start-button:hover {
+  box-shadow: var(--highlight-icon);
+}
+
+#left-col .form-check {
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+  /* ensures compatibility */
+  gap: 0.5rem;
+}
+
+#left-col .form-check-input {
+  margin-top: 0;
+  /* reset Bootstrap's default top margin */
+}
+
+#left-col .form-check-label {
+  margin-bottom: 0;
+  /* reset default margin */
+  line-height: 1.5;
+  /* adjust as needed for vertical alignment */
+}
+
+
+#start-button .icon-start {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+}
+
+.annotation {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family-sans-serif-1);
+  font-weight: var(--font-weight-300);
+  font-size: var(--font-size-14);
+}
+
+#right-col {
+  gap: 0.5rem;
+}
+
+#right-col .sketchbook-text {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+
+
+#right-col #showcases {
+  display: flex;
+  width: 100%;
+  height: fit-content;
+  position: relative;
+  align-items: center;
+  /* overflow: hidden; */
+}
+
+#metabolism-preview {
+  width: 105%;
+  height: fit-content;
+  /* max-height: 100%; */
+  border-radius: 1rem;
+  overflow: hidden;
+  /* box-shadow: rgba(109, 120, 148, 0.75) 9px 12px 36px 0px; */
+}
+
+#metabolism-preview #metabolism-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+
+#showcases .floating-anno {
+  position: absolute;
+  border-radius: 0.5rem;
+  font-family: var(--font-family-sans-serif-sketchbook);
+  width: 16%;
+  padding: 0.5rem 0.25rem;
+}
+
+#showcases .floating-anno.anno-et {
+  top: 15%;
+  left: 0%;
+}
+
+.floating-anno .icon-sketch-highlighter {
+  width: 4rem;
+  height: 2rem;
+  transform: translate(5.9rem, -1.2rem);
+}
+
+
+#showcases .floating-anno.anno-regen {
+  top: 65%;
+  left: 0%;
+}
+
+#showcases .floating-anno.anno-susop {
+  background-color: var(--variable-collection-themelightpurple);
+  box-shadow: var(--highlight-dim);
+  top: 35%;
+  right: 0%;
+}
+
+#showcases .floating-anno.external-link {
+  width: 6rem;
+  height: 6rem;
+  right: -20%;
+  bottom: 4%;
+  rotate: 0deg;
+  gap: 1rem;
+  color: black;
+  scale: 1.2;
+}
+
+#showcases .floating-anno.external-link:hover {
+  scale: 1.5;
+}
+
+
+#showcases .floating-anno.sysbar {
+  background-color: var(--variable-collection-themelightpurple);
+  box-shadow: var(--highlight-dim);
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  left: 2.5%;
+  bottom: -4%;
+  gap: 2.25rem;
+  padding: 0.5rem 2rem;
+}
+
+.floating-anno.sysbar .sysbar-item {
+  display: flex;
+  flex-direction: column;
+  width: 1.875rem;
+  height: fit-content;
+  border-radius: 50%;
+  align-items: center;
+}
+
+
+#showcases #prompt-preview {
+  position: absolute;
+  width: 25%;
+  aspect-ratio: 1;
+  right: 2.5%;
+  bottom: -10%;
+  background: url("./images/Prompt1.png") lightgray 50% / cover no-repeat;
+  box-shadow: var(--highlight-dim);
+  border-radius: 1rem;
+}
+
+#showcases .project-info {
+  position: absolute;
+  color: var(--GRAY-TEXT);
+  font-size: 10px;
+  gap: 0;
+  bottom: 0;
+  left: -80%;
+}
+
+#showcases .special-icon {
+  position: absolute;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -0.5rem;
+  right: 1rem;
+  color: white;
+  background-color: black;
+  width: 1em;
+  height: 1em;
+  cursor: pointer;
+}
+
+#showcases .special-icon:hover {
+  box-shadow: var(--highlight-icon);
+}
+
+.landing-page .component-wrapper .sub-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.landing-page .component-wrapper .component-text {
+  color: #FFF;
+  text-align: right;
+  font-family: var(--heading-2-font-family);
+  font-size: 1.5rem;
+  font-weight: 500;
+  transition: none;
+  /* No transition for the text to keep its position */
+}

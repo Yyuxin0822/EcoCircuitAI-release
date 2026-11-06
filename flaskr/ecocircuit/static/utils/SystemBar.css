@@ -1,0 +1,245 @@
+#system-bar {
+    /* layout */
+    border: 1px solid #ccc;
+    box-shadow: var(--highlight-dim);
+    text-align: center;
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+    gap: 2.25rem;
+    padding: 0.5rem 2rem;
+    justify-content: center;
+    /* align-items: flex-start; */
+    border-radius: 0.5rem;
+    font-family: var(--font-family-sans-serif-sketchbook);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#system-bar:hover {
+    background: var(--variable-collection-themelightpurple);
+}
+
+#system-bar .icon-common {
+    display: flex;
+    position: relative;
+}
+
+#system-bar .toggle {
+    display: flex;
+    flex-direction: column;
+    width: 1.875rem;
+    height: fit-content;
+    border-radius: 50%;
+    align-items: center;
+}
+
+
+#modal-popup-system {
+    display: flex;
+    height: 92.5%;
+    top: 7.5%;
+    width: 100%;
+    min-width: 60rem;
+    padding: 0rem 2.375rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    flex-shrink: 0;
+    align-self: stretch;
+    position: fixed;
+    background-color: #FFF;
+    font-family: var(--font-family-sans-serif-1);
+}
+
+#modal-popup-system {
+    display: none;
+}
+
+.modal-system {
+    /* layout */
+    display: flex;
+    width: 60rem;
+    /* height: 75%; */
+    padding: 1rem 0rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1rem;
+    /* position */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+    /* style */
+    background: #FFF;
+    font-family: var(--font-family-sans-serif-1);
+}
+
+.modal-system>.frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    align-self: stretch;
+}
+
+.modal-system>.frame>.sub-frame-1 {
+    display: flex;
+    width: 56.25rem;
+    padding: 1rem 2.25rem;
+    align-items: center;
+    gap: 1rem;
+    border-radius: 0.5rem;
+    border: 2px dashed var(--ThemeDarkColor, #8894B3);
+}
+
+.modal-system .syslist-wrapper {
+    display: flex;
+    padding: 0rem 1.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+.modal-system .syslist-wrapper>.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.modal-system .syslist-wrapper .toggle {
+    /* layout */
+    display: flex;
+    width: 20rem;
+    align-items: center;
+    gap: 1rem;
+    /* style */
+    border-radius: 0.5rem;
+    border: 1px solid var(--variable-collection-themelightpurple);
+    /* overflow: hidden; */
+    position: relative;
+    z-index: 1;
+}
+
+.modal-system .toggle .sysicon {
+    display: flex;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.modal-system .systext {
+    overflow: hidden;
+    font-family: var(--font-family-sans-serif-sketchbook);
+}
+
+.modal-system .systext[contenteditable] {
+    text-transform: uppercase;
+}
+
+.modal-system .systext[contenteditable]:empty::before {
+    content: "CUSTOM SYSTEM";
+    color: rgba(0, 0, 0, 0.3);
+}
+
+.modal-system .systext[contenteditable="true"]:focus {
+    /* or even just .systext:focus if you never make them focusable any other way */
+    border: 2px solid black;
+    border-radius: 0.25rem;
+    outline: none;
+}
+
+
+.modal-system .icon-letter, #system-bar .icon-letter {
+    color: black;
+    font-family: 'Inter', sans-serif;
+    font-weight: normal;
+    font-size: 1.2rem;  /* Increased font size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;  /* Override _reboot.scss */
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.modal-system .toggle:hover {
+    background: var(--variable-collection-themelightpurple);
+}
+
+.modal-system .icon-close2 {
+    background-image: url('../icon/07_Close.png');
+    /* layout */
+    display: flex;
+    width: 1rem;
+    height: 1rem;
+    align-items: flex-start;
+    /* position */
+    position: absolute;
+    right: -0.5rem;
+    top: -0.5rem;
+    background-color: #F4F6FC;
+    cursor: pointer;
+}
+
+.modal-system .icon-close2:hover {
+    background-color: var(--variable-collection-themedarkpurple);
+}
+
+.modal-system .toggle:hover .icon-close2 {
+    display: block;
+}
+
+.modal-system .toggle.active .icon-close2 {
+    display: block;
+}
+
+.modal-system .toggle .icon-close2 {
+    display: none;
+}
+
+.modal-system>.frame>.sub-frame-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.modal-system .icon-editer {
+    /* layout */
+    display: flex;
+    width: 22.5rem;
+    height: 22.5rem;
+    padding: 3rem 3.75rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    /* style */
+    border-radius: 1.5rem;
+    border: 1px solid var(--variable-collection-themelightpurple);
+}
+
+.modal-system .icon-editer.active {
+    border: 8px solid var(--variable-collection-themelightpurple);
+}
+
+
+.modal-system .modalbtn {
+    cursor: pointer;
+  }
+  
+.modal-system .modalbtn:hover {
+text-decoration: underline;
+}

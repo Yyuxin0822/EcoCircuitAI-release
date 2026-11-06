@@ -1,0 +1,95 @@
+/* Scroll-snap specific styles */
+
+/* Basic scroll behavior */
+html {
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* CSS scroll-snap as fallback */
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 0; /* Allow snapping to very top */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensure header doesn't interfere with scroll snap */
+#header-bar {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Scroll snap containers */
+.scroll-snap {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Footer doesn't need full viewport height */
+#footer.scroll-snap {
+  min-height: auto;
+  scroll-snap-align: end;
+}
+
+/* Scroll trigger button */
+.scroll-trigger {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
+  user-select: none;
+  z-index: 10;
+  width: 12rem;
+  height: 4rem;
+  border-radius: 7.5rem;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.scroll-trigger:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Label positioned in the visible quarter */
+.quarter-label {
+  display: flex;
+  height: 3.6875rem;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  right: 1rem;
+  top: 0;
+  color: #000;
+  text-align: right;
+  text-wrap: wrap;
+  /* handdrawn */
+  font-family: "Combo", sans-serif;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 125%;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.quarter-label:hover {
+  color: var(--THEME-PURPLE, #6b46c1);
+}
+
+/* Hide scroll triggers when not needed */
+.scroll-trigger.hidden {
+  opacity: 0;
+  pointer-events: none;
+}

@@ -1,0 +1,316 @@
+{% extends 'account/account_base.html' %}
+{% set active_page = 'settings' %}
+
+{% block account_content %}
+<!-- Account Settings Section - Using original styling -->
+<section class="page-content main-container" id="account-settings" style="display: flex">
+  <div class="sector">
+    <h2>Profile</h2>
+    <hr />
+    <div class="account-info">
+      <label>Username:</label>
+      <span id="username-display">{{ g.user['name'] }}</span>
+      <button id="username-edit" class="btn btn-green" style="margin-left:8px;">Edit</button>
+      <input id="username-input" type="text" value="{{ g.user['name'] }}" style="display:none;" maxlength="64" />
+      <button id="username-save" class="btn btn-green" style="display:none; margin-left:8px;">Save</button>
+      <span id="username-status" class="status-text" style="margin-left:8px;"></span>
+    </div>
+    <div class="account-info">
+      <label>Email:</label>
+      <span id="email">{{ g.user['email'] }}</span>
+    </div>
+  </div>
+  <div class="sector">
+    <h2>Delete Account</h2>
+    <hr />
+    <span>
+      Deleting your account is permanent and cannot be undone. Please be
+      certain.
+    </span>
+    <button id="delete-account-btn" class="btn btn-danger" onclick="deleteAccount()">
+      Delete Your Account
+    </button>
+  </div>
+</section>
+
+<!-- Simple, focused JavaScript for settings only -->
+<script>
+// Initialize Socket.IO for account namespace
+// Use current origin to avoid mixed environments
+var accountSocket = io(window.location.origin + '/account', {
+  path: '/socket.io',
+  transports: ['websocket', 'polling'],
+  reconnection: false,
+  pingTimeout: 600000,
+  pingInterval: 250000
+});
+
+function deleteAccount() {
+  const confirmMessage = "Are you absolutely sure you want to delete your account?\n\nThis action will:\n• Remove all your projects\n• Delete your API keys\n• Remove all account data\n\nThis CANNOT be undone.\n\nType 'DELETE' to confirm:";
+  
+  const userInput = prompt(confirmMessage);
+  
+  if (userInput !== 'DELETE') {
+    alert('Account deletion cancelled. You must type "DELETE" exactly to confirm.');
+    return;
+  }
+  
+  // Final confirmation
+  if (!confirm("This is your final warning. Your account will be permanently deleted. Are you sure?")) {
+    return;
+  }
+
+  // Show loading state
+  const deleteBtn = document.getElementById('delete-account-btn');
+  const originalText = deleteBtn.textContent;
+  deleteBtn.disabled = true;
+  deleteBtn.textContent = 'Deleting...';
+
+  fetch('/account/settings', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
+      alert("Your account has been deleted successfully. You will now be redirected.");
+      window.location.href = data.redirect_url || '/';
+    } else {
+      alert("Failed to delete account: " + data.message);
+      deleteBtn.disabled = false;
+      deleteBtn.textContent = originalText;
+    }
+  })
+  .catch(error => {
+    console.error("Error deleting account:", error);
+    alert("An error occurred while trying to delete your account. Please try again.");
+    deleteBtn.disabled = false;
+    deleteBtn.textContent = originalText;
+  });
+}
+
+// Username edit/save logic
+(function () {
+  const display = document.getElementById('username-display');
+  const input = document.getElementById('username-input');
+  const saveBtn = document.getElementById('username-save');
+  const editBtn = document.getElementById('username-edit');
+  const status = document.getElementById('username-status');
+
+  function setStatus(msg, type = 'info') {
+    status.textContent = msg || '';
+    status.className = 'status-text ' + (type === 'error' ? 'text-danger' : type === 'success' ? 'text-success' : '');
+  }
+
+  function startEdit() {
+    display.style.display = 'none';
+    input.style.display = 'inline-block';
+    saveBtn.style.display = 'inline-block';
+    if (editBtn) editBtn.style.display = 'none';
+    input.value = display.textContent.trim();
+    setStatus('');
+    input.focus();
+    input.select();
+  }
+
+  function finishEdit(success) {
+    input.style.display = 'none';
+    saveBtn.style.display = 'none';
+    display.style.display = 'inline-block';
+    if (editBtn) editBtn.style.display = 'inline-block';
+    if (success) setStatus('Saved', 'success');
+  }
+
+  function validateName(name) {
+    const trimmed = name.trim();
+    if (!trimmed) return 'Username cannot be empty';
+    if (trimmed.length > 64) return 'Username is too long';
+    return null;
+  }
+
+  function saveName() {
+    const newName = input.value.trim();
+    const err = validateName(newName);
+    if (err) {
+      setStatus(err, 'error');
+      return;
+    }
+    if (newName === display.textContent.trim()) {
+      finishEdit(false);
+      return;
+    }
+    setStatus('Saving...');
+    saveBtn.disabled = true;
+
+    // Prefer helper if global socket exists, otherwise use accountSocket directly
+    const sock = (typeof socket !== 'undefined' && socket && socket.connected) ? socket : accountSocket;
+    sock.emit('update_username', { name: newName }, (resp) => {
+      saveBtn.disabled = false;
+      if (resp && resp.error) {
+        setStatus(resp.error, 'error');
+        return;
+      }
+      const updated = (resp && resp.name) || newName;
+      display.textContent = updated;
+      // Also update header navbar name if present
+      const headerUser = document.querySelector('#user-signed-in a');
+      if (headerUser) headerUser.textContent = updated;
+      finishEdit(true);
+    });
+  }
+
+  if (editBtn) editBtn.addEventListener('click', startEdit);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      saveName();
+    } else if (e.key === 'Escape') {
+      finishEdit(false);
+    }
+  });
+  input.addEventListener('blur', () => {
+    // Small delay to allow clicking save button
+    setTimeout(() => {
+      if (document.activeElement !== saveBtn) finishEdit(false);
+    }, 150);
+  });
+  saveBtn.addEventListener('click', saveName);
+})();
+</script>
+
+<style>
+.settings-page {
+  max-width: 800px;
+}
+
+#account-settings {
+  display: flex;
+  flex-wrap: wrap; /* ensure items wrap instead of overflowing */
+}
+
+#account-settings .sector {
+  flex: 0 0 55%;
+  max-width: 55%;
+}
+
+.settings-page {
+  max-width: 800px;
+}
+
+.sector {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.account-info {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.account-info label {
+  font-weight: bold;
+  min-width: 120px;
+  color: #495057;
+  font-family: var(--font-family-sans-serif-1);
+}
+
+.account-info span {
+  color: #333;
+  font-family: var(--card-14-font-family);
+  background: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.danger-zone {
+  background: #fff5f5;
+  border: 1px solid #feb2b2;
+  border-radius: 6px;
+  padding: 20px;
+  margin-top: 15px;
+}
+
+.warning-text {
+  color: #c53030;
+  margin-bottom: 15px;
+}
+
+.danger-zone p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: var(--font-family-sans-serif-1);
+  transition: all 0.2s ease;
+}
+
+/* Green button style aligned with #new-api-key */
+.btn.btn-green {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn.btn-green:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.btn-danger:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.status-text {
+  font-size: 12px;
+}
+
+.btn.btn-primary {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.btn.btn-primary:hover:not(:disabled) {
+  background-color: #0b5ed7;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 10px;
+  font-family: var(--heading-2-font-family);
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background: #dee2e6;
+  margin: 10px 0;
+}
+
+/* Small screens: stack full width */
+@media (max-width: 768px) {
+  #account-settings .sector {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+</style>
+{% endblock %}

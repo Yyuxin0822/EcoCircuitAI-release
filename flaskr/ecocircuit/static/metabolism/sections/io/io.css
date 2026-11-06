@@ -1,0 +1,42 @@
+/* IO Section Specific Styles */
+
+/* IO container has 55% width, so header should match */
+#io-container .header {
+  width: 55vw;
+}
+
+/* Styles for header within SVG foreignObject */
+#matrix-io foreignObject .annotation {
+  font-weight: 300;
+  font-family: "Comfortaa", sans-serif;
+  font-size: 12px;
+}
+
+/* Override main container overflow for IO section */
+#io-container {
+  box-sizing: border-box;
+  height: var(--io-viewport-height, calc(100vh - 3rem));
+  height: var(--io-viewport-height, calc(100dvh - 3rem));
+  min-height: 0;
+  padding-bottom: 6rem;
+  overflow: hidden;
+}
+
+/* svg-wrapper styling */
+#io-container .svg-wrapper {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Main SVG container */
+#matrix-io {
+  display: block;
+  overflow: visible;
+}
+
+/* Inner content SVG */
+#matrix-io-content {
+  display: block;
+  overflow: visible;
+}

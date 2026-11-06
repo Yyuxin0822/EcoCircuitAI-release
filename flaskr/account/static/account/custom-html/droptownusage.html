@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Icon Dropdown</title>
+  <style>
+    .func-icon {
+      font-size: 18px;
+      padding: 6.25rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<icon-dropdown>
+  <div slot="icon" class="func-icon">=</div>
+  <ul slot="menu" style="list-style:none; margin:0; padding:0;">
+    <li>
+      <icon-dropdown>
+        <div slot="icon" style="color:blue;">Action 1 ▸</div>
+        <div slot="menu">
+          <div style="color:blue;">Sub Action 1</div>
+          <div style="color:blue;">Sub Action 2</div>
+        </div>
+      </icon-dropdown>
+    </li>
+    <li style="color:blue;">Action 2</li>
+    <li style="color:blue;">Action 3</li>
+  </ul>
+</icon-dropdown>
+
+<script>
+  class IconDropdown extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.innerHTML = `
+        <style>
+          :host { display: inline-block; position: relative; }
+          .trigger {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+          }
+          .menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 0.25rem;
+            min-width: 8rem;
+            display: none;
+            z-index: 1000;
+          }
+          .menu.open {
+            display: block;
+          }
+        </style>
+        <button class="trigger">
+          <slot name="icon">☰</slot>
+        </button>
+        <div class="menu">
+          <slot name="menu">
+            <div style="padding:0.5rem">No items</div>
+          </slot>
+        </div>
+      `;
+      this._toggle = this._toggle.bind(this);
+      this._onClickOutside = this._onClickOutside.bind(this);
+    }
+
+    connectedCallback() {
+      this.shadowRoot.querySelector('.trigger')
+        .addEventListener('click', this._toggle);
+      document.addEventListener('click', this._onClickOutside);
+    }
+
+    disconnectedCallback() {
+      this.shadowRoot.querySelector('.trigger')
+        .removeEventListener('click', this._toggle);
+      document.removeEventListener('click', this._onClickOutside);
+    }
+
+    _toggle(e) {
+      e.stopPropagation();
+      const menu = this.shadowRoot.querySelector('.menu');
+      menu.classList.toggle('open');
+    }
+
+    _onClickOutside(e) {
+      const menu = this.shadowRoot.querySelector('.menu');
+      if (!this.contains(e.target) && menu.classList.contains('open')) {
+        menu.classList.remove('open');
+      }
+    }
+  }
+
+  customElements.define('icon-dropdown', IconDropdown);
+</script>
+
+</body>
+</html>

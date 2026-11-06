@@ -1,0 +1,14 @@
+{
+  "name": "ecocircuit-flaskr",
+  "version": "1.0.0",
+  "description": "EcoCircuit AI explores integrated environmental systems through interactive, AI-generated diagrams.",
+  "scripts": {
+    "format": "prettier --write \"flaskr/**/*.{js,css,html}\""
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  },
+  "note": "All JS libraries (d3, jquery, socket.io, etc.) are loaded via CDNs in HTML templates for better performance and reduced bundle size."
+}

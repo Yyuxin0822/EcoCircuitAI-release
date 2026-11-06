@@ -1,0 +1,4 @@
+-r requirements.txt
+
+# Only needed to run the Python test suite.
+pytest==8.2.0

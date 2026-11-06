@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+<!-- Shared styles for all account pages -->
+<!-- Base already includes Google Fonts and styleguide.css -->
+<link rel="stylesheet" href="{{ url_for('account.static', filename='account/css/base.css') }}" />
+<link rel="stylesheet" href="{{ url_for('account.static', filename='account/css/toolbar.css') }}" />
+<link rel="stylesheet" href="{{ url_for('account.static', filename='account/css/account.css') }}" />
+<style>
+  /* Hide share icon on account pages without JS to avoid later reflow */
+  #header-bar #share-icon { display: none !important; }
+  /* Ensure header is visible on account pages */
+  #header-bar { display: flex !important; }
+  /* Remove underline hover weight jumps affecting layout */
+  #header-bar a:hover { font-weight: inherit; }
+  #header-bar a { text-decoration: none; }
+  /* Avoid flash of incorrect font weight by specifying base font-family */
+  body { font-family: var(--font-family-sans-serif-1); }
+  .heading-1, .heading-2 { font-family: var(--heading-1-font-family); }
+</style>
+
+<!-- Page-specific scripts will be added by child templates -->
+{% block page_scripts %}{% endblock %}
+
+<!-- Toolbar functionality -->
+<script>
+function toggleToolbar(expand = true, id = "") {
+    const tool = document.getElementById(id);
+    const minimized = tool.querySelector(".minimized-toolbar");
+    const expanded = tool.querySelector(".expanded-toolbar");
+    minimized?.style.setProperty("display", expand ? "none" : "flex");
+    expanded?.style.setProperty("display", expand ? "flex" : "none");
+}
+
+// Initialize toolbar on page load
+document.addEventListener('DOMContentLoaded', () => {
+  // Make sure toolbar is expanded by default
+  toggleToolbar(true, 'navi-tool');
+});
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Navigation Panel - Original Right-Side Toolbar -->
+<div id="right-toolbar-container" class="fixed-elements">
+  <div id="navi-tool">
+    <span
+      class="toolbtn minimized-toolbar"
+      style="display: none"
+      onclick="toggleToolbar(expand = true, id = 'navi-tool')"
+    ></span>
+
+    <div class="expanded-toolbar" style="display: flex">
+      <span
+        class="toolbtn minimize-icon"
+        onclick="toggleToolbar(expand = false, id = 'navi-tool')"
+      ></span>
+      <div id="navibar-wrapper">
+        <div id="navibar-container">
+          <div>Navigation</div>
+          <ul>
+            <li class="{{ 'active' if active_page == 'projects' else '' }}" onclick="location.href='{{ url_for('account.projects') }}'" style="cursor:pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 20h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/>
+                  <path d="M9 9h6v6H9z"/>
+                </svg>
+                Projects
+            </li>
+            <li class="{{ 'active' if active_page == 'api_key' else '' }}" onclick="location.href='{{ url_for('account.api_key') }}'" style="cursor:pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4l-2.3-2.3a1 1 0 0 0-1.4 0l-2.1 2.1a1 1 0 0 0 0 1.4Z"/>
+                  <path d="m21 2-9.6 9.6"/>
+                  <circle cx="7.5" cy="15.5" r="5.5"/>
+                </svg>
+                API Key Settings
+            </li>
+            <li class="{{ 'active' if active_page == 'settings' else '' }}" onclick="location.href='{{ url_for('account.settings') }}'" style="cursor:pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                Account
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content Area -->
+<main class="main-container">
+  {% block account_content %}{% endblock %}
+</main>
+{% endblock %}

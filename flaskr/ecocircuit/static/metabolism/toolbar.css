@@ -1,0 +1,19 @@
+
+
+#draw-icon,
+#share-icon {
+    cursor: pointer;
+    position: relative;
+}
+
+
+
+/* Essentially when hover...  */
+.menu-divider {
+    width: 100%;
+    height: 1px;
+    background: #ccc;
+    /* Divider color */
+    margin: 0.5rem 0;
+}
+

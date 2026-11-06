@@ -1,0 +1,70 @@
+{% extends 'account/account_base.html' %}
+{% set active_page = 'api_key' %}
+
+{% block page_scripts %}
+<!-- API key specific styles -->
+<link rel="stylesheet" href="{{ url_for('account.static', filename='account/css/api_key.css') }}" />
+<!-- Load API key specific JavaScript -->
+<script src="{{ url_for('account.static', filename='account/js/api_key.js') }}"></script>
+{% endblock %}
+
+{% block account_content %}
+<!-- API Key Settings Section - Using original styling -->
+<section class="page-content main-container" id="api-key-settings" style="display: flex">
+  <!-- API Key Display Section -->
+  <div class="api-key-container sector" id="api-key-display">
+    <h2>API Key Settings</h2>
+    <hr />
+    <div class="api-key-display" id="api-key-display-container">
+      <label>Your API Key:&nbsp;</label>
+      <div id="api-key-value">{{ api_key if api_key else "No API Key set" }}</div>
+      <button id="del-btn" onclick="deleteApiKey()">Delete</button>
+    </div>
+    <div class="actions">
+      <br />
+      <button id="new-api-key">New API Key</button>
+    </div>
+  </div>
+
+  <!-- New API Key Form Section -->
+  <div class="api-key-container sector" id="new-api-key-container" style="display: none">
+    <h2>Add new API Key</h2>
+    <hr />
+    <form class="buttons" method="post" action="{{ url_for('account.store_key') }}" autocomplete="off" id="api-key-form">
+      <div id="api-key-box">
+        <div id="api-key-msg" style="display: flex; align-items: center; gap: 0.5rem">
+          <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 23 23" fill="none" transform="translate(0, -2.5)">
+            <path d="M5.5 20.5H9.5C9.5 21.6 8.6 22.5 7.5 22.5C6.4 22.5 5.5 21.6 5.5 20.5ZM3.5 19.5H11.5V17.5H3.5V19.5ZM15 10C15 13.82 12.34 15.86 11.23 16.5H3.77C2.66 15.86 0 13.82 0 10C0 5.86 3.36 2.5 7.5 2.5C11.64 2.5 15 5.86 15 10ZM13 10C13 6.97 10.53 4.5 7.5 4.5C4.47 4.5 2 6.97 2 10C2 12.47 3.49 13.89 4.35 14.5H10.65C11.51 13.89 13 12.47 13 10ZM19.87 7.87L18.5 8.5L19.87 9.13L20.5 10.5L21.13 9.13L22.5 8.5L21.13 7.87L20.5 6.5L19.87 7.87ZM17.5 6.5L18.44 4.44L20.5 3.5L18.44 2.56L17.5 0.5L16.56 2.56L14.5 3.5L16.56 4.44L17.5 6.5Z" fill="black"/>
+          </svg>
+          <div style="line-height: 1.5">
+            EcoCircuitAI is open-source and has no charge on our end. To proceed, we ask users to provide their own API key, as the tool uses a third-party large language model (LLM).
+            <a class="bold link-to-external" href="{{ url_for('ecocircuit.static', filename='docs/How to Get Your OpenAI API Key.pdf') }}" target="_blank" rel="noopener noreferrer">Learn how to get OPENAI API key and third-party usage cost examples.</a>
+            <br />
+          </div>
+        </div>
+        <div id="api-key-input" class="api-key-input-container">
+          <label>Your new API Key:&nbsp;</label>
+          <input type="password" name="api_key" placeholder="Input your OPENAI API key" autocomplete="off" required />
+          <button type="submit" id="start-button">Use This Key</button>
+        </div>
+      </div>
+
+      <div class="form-check" id="consent-and-openning">
+        <input class="form-check-input" type="checkbox" name="consent" id="consentCheckbox" required />
+        <label class="form-check-label" for="consentCheckbox">
+          By using EcoCircuitAI, you agree to our
+          <a href="#" class="bold link-to-external" data-bs-toggle="modal" data-bs-target="#termsModal">terms</a>
+          and have read our
+          <a href="#" class="bold link-to-external" data-bs-toggle="modal" data-bs-target="#privacyModal">privacy policy</a>.
+        </label>
+      </div>
+    </form>
+
+    <div class="actions">
+      <br />
+      <button id="cancel-new-api-key" class="toggle-simple">Cancel</button>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

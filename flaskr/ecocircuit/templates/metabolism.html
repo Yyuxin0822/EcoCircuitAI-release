@@ -1,0 +1,217 @@
+{% extends 'base.html' %} {% block scripts %}
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+  const info = {{ env | tojson }};
+  window.env = info;
+  const iodata = JSON.parse({{ iodata | tojson }});
+  window.iodata = iodata;
+  const syscolor = JSON.parse({{ syscolor | tojson }});
+  window.defaultSystems = syscolor;
+  console.log("System Colors:", syscolor);
+  const metabolism = JSON.parse({{ metabolism | tojson }});
+  window.metabolism = metabolism;
+  const imgpath = {{ img_url | tojson }};
+  const isAuthenticated = {{ is_authenticated | tojson }};
+  window.isAuthenticated = isAuthenticated;
+  const isGeneratedText = {{ is_generated_text | tojson }};
+  window.is_generated_text = isGeneratedText;
+  const projectId = {{ id | tojson }};
+  window.projectId = projectId;
+  const showClaimPrompt = {{ show_claim_prompt | tojson }};
+  const accessLevel = {{ access_level | tojson }};
+  window.showClaimPrompt = showClaimPrompt;
+  window.projectAccess = accessLevel[0];
+  window.projectAccessLevel = accessLevel[1];
+  const userId = {{ g.user.id | tojson if g.user else 'null' }};
+  const author ={{authorname | tojson}};
+  window.authorname = author;
+  window.author = author;
+</script>
+<script>
+  const isLocal =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+  const baseUrl = isLocal
+    ? "http://127.0.0.1:8000"
+    : "https://www.ecocircuitai.com";
+
+  // Explicitly added namespace '/ecocircuit' here:
+  const socket = io(baseUrl + "/ecocircuit", {
+    path: "/socket.io",
+    transports: ["websocket", "polling"],
+    withCredentials: true,
+    autoConnect: false,
+  });
+  window.socket = socket; // Make socket globally accessible
+  document.addEventListener("DOMContentLoaded", function () {
+    socket.connect();
+
+    socket.on("connect", function () {
+      console.log("✅ Connected to /ecocircuit.");
+    });
+
+    socket.on("private_msg", function (msg) {
+      console.log("📩 Private message for me:", msg.data);
+    });
+
+    socket.on("disconnect", function () {
+      console.log("❌ Disconnected from /ecocircuit.");
+    });
+
+    socket.on("connect_error", function (error) {
+      console.error("❗ Connection error:", error);
+    });
+
+    window.socket.on("prompt_response", function (msg) {
+      if (msg.status === "success") {
+        window.location.href = msg.redirect_url;
+      } else {
+        alert(msg.error);
+      }
+    });
+
+    // Listen for progress updates
+    window.socket.on("progress_update", (data) => {
+      console.log(data.message, data.percent + "%");
+      updateLoaderText(data.message, data.percent);
+    });
+  });
+</script>
+<script
+  src="{{ url_for('ecocircuit.static', filename='metabolism/project-access.js') }}"
+  defer
+></script>
+<script src="https://d3js.org/d3.v7.min.js" defer></script>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Combo&display=swap"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('ecocircuit.static', filename='icon.css') }}"
+/>
+<script src="{{ url_for('ecocircuit.static', filename='utils/SystemBar.js') }}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("system-bar");
+    if (container) {
+      const systembar = new SystemBar(container);
+    }
+  });
+</script>
+<link
+  rel="stylesheet"
+  href="{{ url_for('ecocircuit.static', filename='utils/SystemBar.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('ecocircuit.static', filename='metabolism/toolbar.css') }}"
+/>
+<script
+  src="{{ url_for('ecocircuit.static', filename='metabolism/toolbar.js') }}"
+  defer
+></script>
+<link
+  rel="stylesheet"
+  href="{{ url_for('ecocircuit.static', filename='metabolism/scroll-snap/scroll-snap.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('ecocircuit.static', filename='metabolism/metabolism.css') }}"
+/>
+<script
+  src="{{ url_for('account.static', filename='account/js/api_key.js') }}"
+  defer
+></script>
+<script
+  src="{{ url_for('ecocircuit.static', filename='metabolism/metabolism-thumbnail-fetch.js') }}"
+  defer
+></script>
+<script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+<script
+  src="{{ url_for('ecocircuit.static', filename='metabolism/scroll-snap/scroll-snap.js') }}"
+  defer
+></script>
+
+{% endblock %} {% block content %}
+
+<!-- Main Page Content -->
+<section id="main-visuals">
+  {% include 'sections/io-section.html' %}
+
+  {% include 'sections/metabolism-section.html' %}
+</section>
+
+<script>
+  // Capture thumbnails after initial visualizations are rendered
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM loaded, waiting for visualizations to render...");
+
+    function checkVisualizationsReady() {
+      const ioSvg = document.getElementById("matrix-io");
+      const metabolismSvg = document.getElementById("matrix-metabolism");
+
+      // Check if both SVGs exist and have content
+      const ioReady =
+        ioSvg && (ioSvg.children.length > 0 || ioSvg.innerHTML.trim() !== "");
+      const metabolismReady =
+        metabolismSvg &&
+        (metabolismSvg.children.length > 0 ||
+          metabolismSvg.innerHTML.trim() !== "");
+
+      if (ioReady && metabolismReady) {
+        console.log("Both visualizations are ready, capturing thumbnails...");
+        if (window.setupThumbnailCapture) {
+          window.setupThumbnailCapture();
+        } else {
+          console.warn("setupThumbnailCapture function not available");
+        }
+        return true;
+      }
+      return false;
+    }
+
+    // Try immediately
+    if (checkVisualizationsReady()) {
+      return;
+    }
+
+    // If not ready, use MutationObserver to watch for changes
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+          if (checkVisualizationsReady()) {
+            observer.disconnect();
+          }
+        }
+      });
+    });
+
+    // Observe both SVGs for changes
+    const ioSvg = document.getElementById("matrix-io");
+    const metabolismSvg = document.getElementById("matrix-metabolism");
+
+    if (ioSvg) {
+      observer.observe(ioSvg, { childList: true, subtree: true });
+    }
+    if (metabolismSvg) {
+      observer.observe(metabolismSvg, { childList: true, subtree: true });
+    }
+
+    // Fallback timeout in case MutationObserver doesn't catch it
+    setTimeout(function () {
+      if (checkVisualizationsReady()) {
+        observer.disconnect();
+      } else {
+        console.warn(
+          "Visualizations not ready after 10 seconds, attempting thumbnail capture anyway..."
+        );
+        if (window.setupThumbnailCapture) {
+          window.setupThumbnailCapture();
+        }
+        observer.disconnect();
+      }
+    }, 10000);
+  });
+</script>
+{% endblock %}

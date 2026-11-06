@@ -1,0 +1,34 @@
+[project]
+name = "flaskr"
+version = "1.0.0"
+description = "EcoCircuit AI explores integrated environmental systems through interactive, AI-generated diagrams."
+requires-python = ">=3.10"
+dependencies = [
+    "Authlib==1.6.3",
+    "boto3==1.35.91",
+    "click==8.1.7",
+    "cryptography==44.0.2",
+    "eventlet==0.35.2",
+    "Flask==3.0.3",
+    "Flask-Cors==4.0.1",
+    "Flask-Session==0.8.0",
+    "Flask-SocketIO==5.3.6",
+    "nest-asyncio==1.6.0",
+    "numpy==1.26.4",
+    "openai==1.40.8",
+    "pillow==10.3.0",
+    "pydantic==2.7.1",
+    "pyppeteer==2.0.0",
+    "python-dotenv==1.0.1",
+    "requests==2.31.0",
+    "Werkzeug==3.0.3",
+    "httpx==0.27.0",
+    "urllib3==1.26.20",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==8.2.0"]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"

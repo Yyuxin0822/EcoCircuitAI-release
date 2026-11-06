@@ -1,0 +1,17 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    gap: 1rem;
+    padding-top: 0;
+    padding-bottom: 2rem;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.sector {
+     width: 80%;
+}

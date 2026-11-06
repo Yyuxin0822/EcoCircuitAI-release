@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>EcoCircuit AI {% block title %}{% endblock %}</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+
+    <!-- Google Fonts links removed from global base to avoid font swap on pages that don't need them. 
+         Pages that use Combo or ADLaM should include their own font links locally. -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styleguide.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    <script src="{{ url_for('static', filename='base.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/logout-cleanup.js') }}"></script>
+
+    {% block scripts %} {% endblock %}
+  </head>
+
+  <body>
+    <div id="header-bar"{% if request.endpoint == 'ecocircuit.index' %} style="display: none;"{% endif %}>
+      <div class="title">
+        <a href="{{ url_for('ecocircuit.index', skip_redirect=1) }}"
+          >EcoCircuit</a
+        >
+      </div>
+      <div class="navbar">
+        <div class="component-wrapper" id="home-icon"{% if request.endpoint == 'ecocircuit.prompt' %} style="display: none;"{% endif %}>
+          <a
+            href="{{ url_for('ecocircuit.prompt') }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            New Thinking
+          </a>
+        </div>
+        <div class="component-wrapper" id="share-icon"{% if request.endpoint == 'ecocircuit.prompt' or request.endpoint == 'ecocircuit.contributors' %} style="display: none;"{% endif %}>Share</div>
+
+        {% if g.user %}
+        <div class="component-wrapper">
+          <div id="user-signed-in">
+            <a href="{{ url_for('account.projects') }}"
+              >{{ g.user['name'] }}</a
+            >
+          </div>
+        </div>
+        <div class="component-wrapper">
+          <div>
+            <a href="{{ url_for('auth0.logout') }}">Sign Out</a>
+          </div>
+        </div>
+        {% else %}
+        <div class="component-wrapper">
+          <div>
+            <a href="{{ url_for('auth0.login', next=request.path) }}">Sign In</a>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div id="flash-message"></div>
+    {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+    <div id="error-container"></div>
+    <!-- MAIN CONTENT BLOCK -->
+    {% block content %}{% endblock %}
+    <!-- Cookie Consent Banner -->
+    <div
+      id="cookieBanner"
+      class="position-fixed bottom-0 end-0 bg-dark text-white p-2 m-3 rounded shadow"
+      style="
+        max-width: 320px;
+        font-size: 0.875rem;
+        z-index: 9999;
+        display: none;
+      "
+    >
+      <div>
+        We use cookies for a better experience. See our
+        <a
+          href="#"
+          class="text-info text-decoration-underline"
+          data-bs-toggle="modal"
+          data-bs-target="#cookieModal"
+          >Cookie Policy</a
+        >.
+      </div>
+      <div class="text-end mt-2">
+        <button class="btn btn-sm btn-outline-light" id="acceptCookies">
+          Got it!
+        </button>
+      </div>
+    </div>
+
+    <!-- Cookie Policy Modal -->
+    <div
+      class="modal fade"
+      id="cookieModal"
+      tabindex="-1"
+      aria-labelledby="cookieModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title fw-bold" id="cookieModalLabel">
+              Cookie Policy
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body p-0" style="height: 70vh">
+            <iframe
+              src="{{ url_for('ecocircuit.static', filename='docs/cookie_policy.htm') }}"
+              style="border: none; width: 100%; height: 100%"
+              title="Cookie Policy"
+            >
+            </iframe>
+          </div>
+          <div class="modal-footer bg-light">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terms of Use Modal -->
+    <div
+      class="modal fade"
+      id="termsModal"
+      tabindex="-1"
+      aria-labelledby="termsModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title fw-bold" id="termsModalLabel">Terms of Use</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body p-0" style="height: 70vh">
+            <iframe
+              src="{{ url_for('ecocircuit.static', filename='docs/terms_and_conditions.htm') }}"
+              style="border: none; width: 100%; height: 100%"
+              title="Terms of Use"
+            >
+            </iframe>
+          </div>
+          <div class="modal-footer bg-light">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div
+      class="modal fade"
+      id="privacyModal"
+      tabindex="-1"
+      aria-labelledby="privacyModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title fw-bold" id="privacyModalLabel">
+              Privacy Policy
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body p-0" style="height: 70vh">
+            <iframe
+              src="{{ url_for('ecocircuit.static', filename='docs/privacy_policy.htm') }}"
+              style="border: none; width: 100%; height: 100%"
+              title="Privacy Policy"
+            >
+            </iframe>
+          </div>
+          <div class="modal-footer bg-light">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const cookieBanner = document.getElementById("cookieBanner");
+        const acceptBtn = document.getElementById("acceptCookies");
+
+        if (!localStorage.getItem("cookieConsent")) {
+          cookieBanner.style.display = "block";
+        }
+
+        acceptBtn.addEventListener("click", () => {
+          localStorage.setItem("cookieConsent", "accepted");
+          cookieBanner.style.display = "none";
+        });
+      });
+    </script>
+  </body>
+</html>

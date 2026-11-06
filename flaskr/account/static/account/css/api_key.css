@@ -1,0 +1,121 @@
+/* Layout for API Key settings page */
+#api-key-settings {
+    display: flex;
+    flex-wrap: wrap; /* avoid overlap with navbar; allow wrapping */
+}
+
+#api-key-settings .api-key-container {
+    flex: 0 0 55%;
+    max-width: 55%;
+}
+
+@media (max-width: 768px) {
+    #api-key-settings .api-key-container {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
+
+/* api-key-container */
+.api-key-container {
+    font-family: var(--font-family-sans-serif-1);
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* For the display container with Show/Delete buttons */
+.api-key-display {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.api-key-display div#api-key-value {
+    font-family: var(--card-14-font-family);
+    background-color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    flex: 1;
+    min-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 8px;
+}
+
+#api-key-settings button {
+    padding: 6px 12px;
+    margin-right: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    background-color: #4CAF50;
+    color: white;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+/* For the input container with "Use This Key" button */
+.api-key-input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.api-key-input-container input {
+    flex: 1;
+    min-width: 200px;
+    margin-right: 8px;
+}
+
+.api-key-input-container button {
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+}
+
+#api-key-settings button:hover {
+    background-color: #45a049;
+}
+
+#api-key-settings button.toggle-simple {
+    background-color: transparent;
+    color: var(--bs-body-color);
+}
+
+#api-key-settings button.toggle-simple:hover {
+    text-decoration: underline;
+}
+
+#api-key-settings #del-btn {
+    background-color: #dc3545; /* match account .btn-danger */
+    color: white;
+    flex-shrink: 0;
+}
+
+#api-key-settings #del-btn:hover {
+    background-color: #c82333; /* match account .btn-danger hover */
+}
+
+/* Consistent typography */
+.api-key-container h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-family: var(--heading-2-font-family);
+}
+
+.api-key-container hr {
+    border: none;
+    height: 1px;
+    background: #dee2e6;
+    margin: 10px 0;
+}
+
+.api-key-container label {
+    font-family: var(--font-family-sans-serif-1);
+}

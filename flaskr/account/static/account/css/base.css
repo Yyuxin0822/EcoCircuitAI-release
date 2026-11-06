@@ -1,0 +1,161 @@
+/* Lato Font Family */
+@font-face {
+  font-family: 'Lato';
+  src: url('../static/fonts/lato/lato-v24-latin-regular.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../static/fonts/lato/lato-v24-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Comfortaa Font Family */
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('../static/fonts/comfortaa/comfortaa-v45-latin-regular.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('../static/fonts/comfortaa/comfortaa-v45-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  /* Ensure the body takes the full height of the viewport */
+  overflow-y: auto;
+  /* Scrollbar at the body level */
+  box-sizing: border-box;
+}
+
+#header-bar {
+  position: fixed;
+  width: 100%;
+  min-width: 66rem;
+  padding: 1rem 1rem 0.5rem 1rem;
+  display: flex;
+  top: 0;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 5;
+  font-size: 12px;
+}
+#header-bar, #header-bar a{
+  color: black;
+}
+
+
+#header-bar>.title {
+  position: absolute;
+  left: 1rem;
+  width: 5rem;
+}
+
+#header-bar>.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  height: 1.5rem;
+}
+
+#header-bar>.navbar .component-wrapper {
+  display: flex;
+  padding: 0.05rem 1rem;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  border-radius: 5rem;
+  background: var(--variable-collection-themelightpurple);
+  /* Regular */
+  box-shadow: var(--regular);
+  cursor: pointer;
+}
+
+.header-bar .component-wrapper:hover {
+  background: var(--variable-collection-themedarkpurple);
+}
+
+
+
+
+
+
+.toggle {
+  position: relative;
+}
+
+
+.page {
+  display: flex;
+  position: relative;
+  margin-top: 5rem;
+  /* Pushes the content 5rem down */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90rem;
+  /* Fixed width to match the header-bar */
+  height: auto;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: none;
+  /* No scrollbar */
+}
+
+/* loader */
+.loader {
+  position: absolute; /* or fixed for entire page loading */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* centers horizontally */
+  justify-content: center; /* centers vertically */
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 4;
+  transition: opacity 0.75s, visibility 0.75s;
+}
+
+.loader-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader-spinner {
+  width: 7.5rem;
+  height: 7.5rem;
+  border: 1rem solid var(--variable-collection-themelightpurple);
+  border-top-color: var(--variable-collection-themedarkpurple);
+  border-radius: 50%;
+  animation: loading 2s linear infinite;
+}
+
+.loader-text {
+  margin-top: 1rem; /* Consistent spacing below spinner */
+  color: var(--variable-collection-themedarkpurple);
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+@keyframes loading {
+  to { transform: rotate(360deg); }
+}
